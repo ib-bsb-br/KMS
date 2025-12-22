@@ -286,6 +286,8 @@ set_ini_kv() {
 
 configure_memcached() {
   log "Configuring Memcached"
+  # Use a 1 GiB cache size (1024 MiB) to keep the value conventional and avoid
+  # confusion with non-standard sizes like 1028.
   sed -i 's/^-m .*/-m 1024/' "$MEMCACHED_CONF" || true
   sed -i 's/^-c .*/-c 4096/' "$MEMCACHED_CONF" || true
   if grep -qE '^-l ' "$MEMCACHED_CONF"; then
