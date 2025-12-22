@@ -1,0 +1,354 @@
+div.infraAreaGlobal{
+width: 98% !important;
+}
+
+div.infraBarraSistemaD{
+padding-top:1em;
+}
+
+.protocoloAberto {
+color:green;
+}
+
+.protocoloFechado {
+color:red;
+}
+
+.protocoloNormal,
+.protocoloAberto,
+.protocoloFechado,
+.linkFuncionalidade {
+text-decoration:none;
+padding:.2em;
+font-size:1.2em !important;
+}
+
+a.protocoloNormal:hover,
+a.protocoloAberto:hover,
+a.protocoloFechado:hover,
+a.processoNaoVisualizadoSigiloso:hover,
+a.processoVisualizadoSigiloso:hover,
+a.linkFuncionalidade:hover{
+text-decoration:underline;
+}
+a.processoNaoVisualizado {
+  color:red;
+}
+
+a.processoVisualizado {
+  color:black;
+}
+
+a.processoNaoVisualizadoSigiloso {
+  padding:0 1em 0 1em;
+  background-color:red;
+  color:white;
+  text-decoration:none;
+}
+
+a.processoVisualizadoSigiloso {
+  padding:0 1em 0 1em;
+  background-color:black;
+  color:white;
+  text-decoration:none;
+}
+
+a.processoCredencialAssinaturaSigiloso {
+  padding:0 1em 0 1em;
+  border:.1em solid red;
+}
+
+a.processoVisitado {
+  color:#0000cc;
+}
+
+a.processoVisitadoSigiloso {
+  background-color:#0000cc;
+}
+
+a.processoVisitadoCredencialAssinatura {
+  border:.1em solid #0000cc;
+}
+
+.infraSpanRealce {background-color:yellow;}
+a.ancoraOpcao{
+color:black;
+display:block;
+text-decoration:none;
+padding:.1em .2em .1em .2em;
+width:98%;
+}
+
+div.tituloProcessoDocumento {
+padding-top:0.4em;
+padding-bottom:0.4em;
+text-align:center;
+vertical-align:middle;
+width:100%;
+color:#666;
+background-color:#dfdfdf;
+border-bottom:.6em solid white;
+overflow:hidden;
+}
+
+div.tituloProcessoDocumento label {
+font-size:1.4em;
+font-weight:bold;
+color:#666;
+background-color:#dfdfdf;
+}
+
+a.botaoSEI img{
+  height:40px !important;
+  width:40px !important;
+  margin-left:1px !important;
+  border:.1em solid white;
+}
+
+a.botaoSEI img:hover {
+  border:.1em solid black;
+}
+
+a.ancoraSigla{
+ /* color:#0000CC; */
+ text-decoration:none;
+ font-size:1em;
+}
+
+a.ancoraSigla:hover{
+ text-decoration:underline;
+}
+
+a.ancoraPadraoAzul{
+padding:0 .5em 0 .5em;
+text-decoration:none;
+font-size:1.2em;
+color: #0066CC;
+}
+
+a.ancoraPadraoPreta{
+padding:0 .5em 0 .5em;
+text-decoration:none;
+font-size:1.2em;
+color: black;
+}
+
+a.ancoraPadraoAzul:hover,
+a.ancoraPadraoPreta:hover{
+text-decoration:underline;
+}
+
+
+fieldset.infraFieldset{
+border:.1em solid black;
+}
+
+legend.infraLegend{
+background-color:#e5e5e5;
+color:black;
+border:.1em solid black;
+}
+
+label.infraLabelOpcional,
+label.infraLabelObrigatorio,
+label.infraLabelCheckbox,
+label.infraLabelRadio{
+color:black;
+}
+
+label.infraLabelObrigatorio span.infraTeclaAtalho{
+color:black;
+}
+
+label.infraLabelOpcional span.infraTeclaAtalho{
+color:black;
+}
+
+span.infraTeclaAtalho{
+color:black;
+}
+
+a.ancoraHistoricoProcesso{
+font-size:1em;
+}
+
+a.ancoraVisualizacaoDocumento{
+font-size:1em;
+}
+
+input.infraButton, button.infraButton{
+border-color: #666 #666 #666 #666;
+color:black;
+}
+
+input.infraButton span.infraTeclaAtalho,
+button.infraButton span.infraTeclaAtalho{
+color:black;
+}
+
+label.infraLabelObrigatorio span.infraTeclaAtalho{
+color:black;
+}
+
+.divItemCelula{
+  padding:.2em 0 .2em 0;
+}
+
+span.spanItemCelula{
+	float:left;
+	border:.1em solid transparent;
+}
+	
+.divDiamante{
+	float:left; 
+	width:5%; 
+	border:.1em solid transparent;
+}
+
+
+table.infraTable img.infraImg,
+table.infraTable img.infraImgNormal,
+table.infraTable img.infraImgOpaca{
+padding:0 .2em 0 .2em;
+}
+
+caption.infraCaption{
+color: black;
+}
+
+tr.totalEstatisticas {
+background-color:#ffffdd;
+}
+
+td.totalEstatisticas {
+background-color:#ffffdd;
+}
+
+div.divAreaGrafico {
+float:left;
+/* width:100%; */
+overflow:auto !important; 
+padding-top:.5em;
+padding-bottom:1.5em;
+font-size:1.2em;
+}
+
+/* ******************** */
+.infraDivCheckbox{
+}
+
+.infraDivRadio{
+}
+
+.infraDivCheckbox input,
+.infraDivRadio input{
+float:left;
+}
+
+.infraDivCheckbox label,
+.infraDivRadio label{
+float:left;
+padding-left:.2em;
+}
+
+.infraDivCheckbox label{
+line-height:1.8em;
+}
+
+.infraDivRadio label{
+line-height:1.6em;
+}
+
+tr.trVermelha{
+background-color:#f59f9f; 
+}
+
+button.buttonWorkflow{
+border: .1em solid red;
+}
+
+div.infraTooltip{
+  max-width: 200px;
+}
+
+img.imagemStatus{
+  vertical-align:top;
+  border: 0;
+  padding-right:5px;
+}
+
+/* Smartmenu */
+#main-menu{
+margin:2px;
+}
+
+.sm-infra-vertical {
+  padding:5px 0 !important;
+  background: #d7d7d7 !important;
+  -moz-border-radius:0px !important;
+  -webkit-border-radius:0px !important;
+  border-radius:0px !important;
+}
+
+.sm-infra a {
+  color: black !important;
+  background-color:#d7d7d7;
+  border-bottom:1px solid white;
+  font-size:13px !important;
+  line-height:14px !important;
+}
+
+.sm-infra ul {
+  background: #d7d7d7 !important;
+  -moz-border-radius:0px !important;
+  -webkit-border-radius:0px !important;
+  border-radius:0px !important;
+}
+
+.sm-infra a:hover, .sm-infra a:focus, .sm-infra a:active, .sm-infra a.highlighted {
+  background-color:white !important;
+}
+
+.sm-infra-vertical a, .sm-infra ul a {
+  padding: 3px 30px 3px 10px !important;
+}
+
+#divInfraAreaTelaE ul li:last-child > a {
+    border:0;
+}
+
+div.formularioTexto {display:block; clear:both; overflow:visible; padding:1em 1em 1em 0; font-size:1.4em;}
+div.formularioTexto a {font-size:1.1em;}
+
+.msgGeral {
+  font-size:12px;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.msgSucesso {
+  /* color: #3c763d; */
+  color: black;
+  background-color: #dff0d8;
+  border-color: #666;
+  /* border-color: #d6e9c6;*/
+  display: none;
+}
+
+.msgFalha {
+  /* color: #a94442; */
+  color: black;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  display: none;
+}
+
+.msgAviso {
+  /* color: #8a6d3b; */
+  color: black;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  display: none;
+}

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "sebastian/diff": "1.4.3",
+        "voku/anti-xss": "2.2.1"
+    }
+}

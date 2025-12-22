@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml-stylesheet type="text/css" href="css/infra-global.css?4434" media="screen"?>
+<?xml-stylesheet type="text/css" href="css/infra-local.css?4344" media="screen"?>
+<?xml-stylesheet type="text/css" href="css/menu-global.css?4443" media="screen"?>
+<?xml-stylesheet type="text/css" href="css/menu-local.css?4434" media="screen"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br">
+<head>
+<title>:: Cadastro ::</title>
+<style type="text/css">
+
+#divInfraAreaDados {height:30em;}
+#lblNome {position:absolute;left:0%;top:3%;width:40%;}
+#txtNome {position:absolute;left:0%;top:10%;width:40%;}
+
+#lblEmail {position:absolute;left:45%;top:3%;width:40%;}
+#txtEmail {position:absolute;left:45%;top:10%;width:40%;}
+
+#lblNoticias {position:absolute;left:4%;top:29%;width:35%;}
+#chkNoticias {position:absolute;left:0%;top:28%;}
+
+#lblCargo { position:absolute;left:45%;top:23%;width:40%;}
+#selCargo {position:absolute;left:45%;top:30%;width:40%;}
+
+#lblInteresse { position:absolute;left:0%;top:43%;width:40%;}
+#selInteresse {position:absolute;left:0%;top:50%;width:40%;}
+
+#fldSexo {position:absolute;left:45%;top:43%;width:35%;height:30%;}
+#divAreaDados > #fldSexo {height:25%;}
+
+#rdoSexoMasculino {position:absolute;left:5%;top:30%;width:10%;}
+#fldSexo > #rdoSexoMasculino {top:15%;}
+
+#rdoSexoFeminino {position:absolute;left:5%;top:60%;width:10%}
+#fldSexo > #rdoSexoFeminino {top:50%;}
+
+#lblSexoMasculino {position:absolute;left:18%;top:30%;width:50%}
+#fldSexo > #lblSexoMasculino {top:15%;}
+
+#lblSexoFeminino {position:absolute;left:18%;top:60%;width:50%}
+#fldSexo > #lblSexoFeminino {top:50%;}
+
+#lblComentarios {position:absolute;left:0%;top:75%;}
+#txaComentarios {position:absolute;left:0%;top:82%;}
+
+#thCheck {width:1%;text-align:center;}
+#thCodigo {width:15%;text-align:center;}
+#thDescricao {width:50%;text-align:left;}
+#thData {width:15%;text-align:center;}
+#thAcoes {width:20%; text-align:center;}
+
+</style>
+<script type="text/javascript" charset="iso-8859-1" src="../infra_js/InfraUtil.js"></script>
+<script type="text/javascript" charset="iso-8859-1" src="../infra_js/InfraMenu.js"></script>
+<script type="text/javascript" charset="iso-8859-1">
+/* <![CDATA[ */
+
+function inicializar(){
+}
+
+function acaoExcluir(id){
+	if (confirm("Confirma exclusão do Contexto "+id+"?")){
+		location.href="contexto_lista.php?acao=excluir_contexto&id_contexto="+id;
+	}
+}
+
+function acaoDesativar(id){
+	if (confirm("Confirma desativação do Contexto "+id+"?")){
+		location.href="contexto_lista.php?acao=desativar_contexto&id_contexto="+id;
+	}
+}
+
+function acaoExclusaoMultipla(){
+	if (document.frmListaContexto.hdnItemsSelecionados.value==''){
+		alert('Nenhum Contexto selecionado.');
+		return;
+	}
+	if (confirm("Confirma exclusão dos Contextos selecionados?")){
+    location.href="contexto_lista.php?acao=excluir_contexto&id_contexto="+document.frmListaContexto.hdnItemsSelecionados.value;		
+	}
+}
+
+function acaoDesativacaoMultipla(){
+	if (document.frmListaContexto.hdnItemsSelecionados.value==''){
+		alert('Nenhum Contexto selecionado.');
+		return;
+	}
+	if (confirm("Confirma desativacao dos Contextos selecionados?")){
+    location.href="contexto_lista.php?acao=desativar_contexto&id_contexto="+document.frmListaContexto.hdnItemsSelecionados.value;		
+	}
+}
+
+function selecaoMultipla() {
+	var frm = document.getElementById('frmListaContexto');
+  for (var i=0; i < 10; i++) {
+	  box = document.getElementById("chkItem" + i);
+   // box = eval("document.frmListaContexto.chkItem" + i);
+    if (frm.imgCheck.title == "Selecionar Todos") {
+      box.checked = true;
+    } else {
+      box.checked = false;
+    }
+  }
+  if (frm.imgCheck.title == "Selecionar Todos") {
+    frm.imgCheck.title = "Remover Seleção";
+  }
+  else {  
+    frm.imgCheck.title = "Selecionar Todos";
+  }
+  selecionarItems();
+}
+
+function selecionarItems() {
+//  var frm = document.frmListaContexto;
+	var frm = document.getElementById('frmListaContexto');;
+  var sel = new String();
+  frm.hdnItemsSelecionados.value="";
+  for (var i=0; i < 10; i++) {
+    box =	document.getElementById("chkItem" + i);
+   // box = eval("document.frmListaContexto.chkItem" + i);
+    if (box.checked) {
+			if (sel.length > 0) {
+				sel = sel.concat(",");
+			}
+      sel = sel.concat(box.value);
+    }
+    
+    frm.hdnItemsSelecionados.value=sel.toString();
+  }
+}
+/* ]]> */
+
+</script>
+</head>
+<body>
+<div class="infraAreaGlobal">
+  
+	<div class="infraBarraTribunal">
+	  <div class="infraBarraTribunalD">
+	    <a href="http://www.jfpr.gov.br/" target="_blank" title="Site da Justiça Federal do Paraná" tabindex="20">PR</a>
+	    <label>&nbsp;|&nbsp;</label>
+	    <a href="http://www.jfrs.gov.br" target="_blank" title="Site da Justiça Federal do Rio Grande do Sul" tabindex="30">RS</a>
+	    <label>&nbsp;|&nbsp;</label>
+	    <a href="http://www.jfsc.gov.br" target="_blank" title="Site da Justiça Federal de Santa Catarina" tabindex="40">SC</a>
+	  </div>
+	  <div class="infraBarraTribunalE">
+    		<a href="http://www.trf4.gov.br/trf4/index.php" target="_blank" title="Site do Tribunal Regional Federal da 4ª Região" tabindex="10">Tribunal Regional Federal da 4ª Região</a>
+	  </div>
+  </div>
+
+  <div class="infraBarraSistema">
+    <div class="infraBarraSistemaD">
+      <a href="intranet" target="_blank" title="Sair do Sistema" tabindex="1000"><img src="imagens/sair.gif" title="Sair do Sistema" alt="Sair do Sistema" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a>         
+    </div>
+    <div class="infraBarraSistemaE">
+      <label>Nome do Sistema</label>
+    </div>
+  </div>
+
+  <div class="infraAreaTela">
+    <div class="infraAreaTelaD">
+			
+			<form id="frmListaContexto" method="post" action="" class="infraForm">
+				
+      	<div class="infraBarraLocalizacao">
+            Barra de Localiza&ccedil;&atilde;o
+        </div>
+      	
+        <div class="infraBarraComandos">
+          <hr /> 
+          <input type="submit" name="btnEnviar" id="btnEnviar1" value="Enviar" class="infraButton" />		 
+        </div>
+         
+        <div id="divInfraAreaDados" class="infraAreaDados">
+              
+    					<label id="lblNome" accesskey="N" for="txtNome" class="infraLabelObrigatorio">
+    					  <span class="infraTeclaAtalho">N</span>ome:
+    					</label>
+              <input type="text" id="txtNome" name="txtNome"  class="infraText" />
+              
+              <label id="lblEmail" accesskey="E" for="txtEmail"  class="infraLabelOpcional">
+        			  <span class="infraTeclaAtalho">E</span>mail:
+        			</label>
+              <input type="text" id="txtEmail" name="txtEmail"  class="infraText"/>
+              
+              <label id="lblNoticias" accesskey="o" for="chkNoticias" class="infraLabelOpcional">
+        			   Receber N<span class="infraTeclaAtalho">o</span>tícias por e-mail
+        			</label>			
+              <input type="checkbox" id="chkNoticias" name="chkNoticias" class="infraCheckbox" checked="checked" />
+        
+              <label id="lblCargo" accesskey="C" for="selCargo" class="infraLabelOpcional">
+        			  <span class="infraTeclaAtalho">C</span>argo:
+        			</label>
+        			
+              <select id="selCargo" name="selCargo" class="infraSelect">
+                <option selected="selected">&nbsp;</option>
+                <option>Analista</option>
+                <option>Digitador</option>
+                <option>Gerente</option>								
+                <option>Operador</option>
+                <option>Programador</option>
+                <option>Outro</option>
+              </select>
+        
+        	    <label id="lblInteresse" accesskey="I" for="selInteresse" class="infraLabelOpcional">
+        			  Áreas de <span class="infraTeclaAtalho">I</span>nteresse:
+        			</label>
+              
+        			<select id="selInteresse" name="selInteresse" size="3" class="infraSelect">
+               <option>Banco de Dados</option>
+               <option>PHP</option>
+               <option>Delphi</option>
+               <option>Java</option>
+               <option>HTML</option>
+              </select>
+    
+              <fieldset id="fldSexo" class="infraFieldset"> 
+        			  <legend class="infraLegendObrigatorio">Sexo:</legend>
+        
+        				<input type="radio" name="rdoSexo" id="rdoSexoMasculino" value="1" checked="checked" class="infraRadio" />
+                <label id="lblSexoMasculino" for="rdoSexoMasculino" accesskey="M" class="infraLabelOpcional">
+        				  <span class="infraTeclaAtalho">M</span>asculino
+        				</label>
+        				    				
+                <input type="radio" name="rdoSexo" id="rdoSexoFeminino" value="2" class="infraRadio" />
+                <label id="lblSexoFeminino" for="rdoSexoFeminino" accesskey="F" class="infraLabelOpcional">
+        				  <span class="infraTeclaAtalho">F</span>eminino
+        				</label>
+        				
+              </fieldset>
+        
+              <label id="lblComentarios" accesskey="s" for="txaComentarios" class="infraLabelObrigatorio">
+        			  Comentário<span class="infraTeclaAtalho">s</span>:
+        			</label>			
+              <textarea id="txaComentarios" name="txaComentarios" cols="80" rows="2" class="infraTextarea"></textarea>
+    		</div> <!-- infraAreaDados -->     	
+  			
+        <div class="infraAreaTabela"> 
+              <table width="99%" class="infraTable" summary="Esta tabela ilustra as ocorrências de ...">
+        			  <caption class="infraCaption">Título da tabela:</caption>
+                <tr>
+                 <th id="thCheck" class="infraTh"><img src="imagens/check.gif" id="imgCheck" title="Selecionar Todos" alt="Selecionar Todos" onclick="selecaoMultipla();" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></th>
+                 <th id="thCodigo" class="infraTh">Código</th>
+                 <th id="thDescricao" class="infraTh">Descrição</th>
+                 <th id="thData" class="infraTh">Data</th>
+    						 <th id="thAcoes" class="infraTh">Ações</th>
+                </tr>
+                <tr class="infraTrClara">
+   							  <td valign="top" align="center"><input type="checkbox" id="chkItem0" class="infraCheckbox" value="1" title="Marcar" onclick="selecionarItems();" /></td>
+          	      <td align="center">1</td>
+          	      <td>Um</td>
+          	      <td align="center">01/01/2000</td>
+    							<td align="center" valign="top"><a href="novo_documento.php?acao=detalhes"><img src="imagens/novo_documento.gif" title="Detalhes do Documento" alt="Detalhes do Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=clonar"><img src="imagens/clonar_documento.gif" title="Clonar Documento" alt="Clonar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=alterar"><img src="imagens/alterar5.gif" title="Alterar Documento" alt="Alterar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="excluir_documento.php"><img src="imagens/excluir1.gif" title="Excluir Documento" alt="Excluir Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a></td>
+    						</tr>
+                <tr class="infraTrEscura"><td valign="top" align="center"><input type="checkbox" id="chkItem1" class="infraCheckbox" value="1" title="Marcar" onclick="selecionarItems();" /></td><td align="center">1</td><td>Um</td><td align="center">01/01/2000</td><td align="center" valign="top"><a href="novo_documento.php?acao=detalhes"><img src="imagens/novo_documento.gif" title="Detalhes do Documento" alt="Detalhes do Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=clonar"><img src="imagens/clonar_documento.gif" title="Clonar Documento" alt="Clonar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=alterar"><img src="imagens/alterar5.gif" title="Alterar Documento" alt="Alterar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="excluir_documento.php"><img src="imagens/excluir1.gif" title="Excluir Documento" alt="Excluir Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a></td></tr>
+                <tr class="infraTrClara"><td valign="top" align="center"><input type="checkbox" id="chkItem2" class="infraCheckbox" value="1" title="Marcar" onclick="selecionarItems();" /></td><td align="center">1</td><td>Um</td><td align="center">01/01/2000</td><td align="center" valign="top"><a href="novo_documento.php?acao=detalhes"><img src="imagens/novo_documento.gif" title="Detalhes do Documento" alt="Detalhes do Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=clonar"><img src="imagens/clonar_documento.gif" title="Clonar Documento" alt="Clonar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=alterar"><img src="imagens/alterar5.gif" title="Alterar Documento" alt="Alterar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="excluir_documento.php"><img src="imagens/excluir1.gif" title="Excluir Documento" alt="Excluir Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a></td></tr>
+                <tr class="infraTrEscura"><td valign="top" align="center"><input type="checkbox" id="chkItem3" class="infraCheckbox" value="1" title="Marcar" onclick="selecionarItems();" /></td><td align="center">1</td><td>Um</td><td align="center">01/01/2000</td><td align="center" valign="top"><a href="novo_documento.php?acao=detalhes"><img src="imagens/novo_documento.gif" title="Detalhes do Documento" alt="Detalhes do Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=clonar"><img src="imagens/clonar_documento.gif" title="Clonar Documento" alt="Clonar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=alterar"><img src="imagens/alterar5.gif" title="Alterar Documento" alt="Alterar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="excluir_documento.php"><img src="imagens/excluir1.gif" title="Excluir Documento" alt="Excluir Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a></td></tr>
+                <tr class="infraTrClara"><td valign="top" align="center"><input type="checkbox" id="chkItem4" class="infraCheckbox" value="1" title="Marcar" onclick="selecionarItems();" /></td><td align="center">1</td><td>Um</td><td align="center">01/01/2000</td><td align="center" valign="top"><a href="novo_documento.php?acao=detalhes"><img src="imagens/novo_documento.gif" title="Detalhes do Documento" alt="Detalhes do Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=clonar"><img src="imagens/clonar_documento.gif" title="Clonar Documento" alt="Clonar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="novo_documento.php?acao=alterar"><img src="imagens/alterar5.gif" title="Alterar Documento" alt="Alterar Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a><a href="excluir_documento.php"><img src="imagens/excluir1.gif" title="Excluir Documento" alt="Excluir Documento" onmouseover="this.className='infraImgOpaca'" onmouseout="this.className='infraImgNormal'" class="infraImgNormal" /></a></td></tr>
+               </table>
+			 				 <input type="hidden" name="hdnItemsSelecionados" value="" />
+    			</div> <!-- infraAreaTabela -->		 
+					
+          <div class="infraBarraComandos" >
+              <hr />
+              <input type="submit" name="btnEnviar" id="btnEnviar2" value="Enviar" class="infraButton" />		 
+          </div>
+					
+      </form>
+		</div> <!-- infraAreaTelaD -->
+    
+		<div class="infraAreaTelaE">
+      <div class="infraMenu">
+        <ul>
+            <li><a href="layout-padrao.xhtml" title="" >Item 1</a>
+              <ul>
+                <li><a href="layout-padrao.xhtml" title="" >Item 1.1</a></li>
+                <li><a href="layout-padrao.xhtml" title="" >Item 1.2</a></li>
+                <li><a href="layout-padrao.xhtml" title="" >Item 1.3</a></li>
+              </ul>
+            </li>
+        </ul>
+        <ul>
+          <li><a href="layout-padrao.xhtml" title="" >Item 2</a>
+            <ul>
+              <li><a href="layout-padrao.xhtml" title="">Item 2.1</a>	
+                <ul>
+                  <li><a href="layout-padrao.xhtml" title="">Item 2.1.1</a></li>
+                  <li><a href="layout-padrao.xhtml" title="">Item 2.1.2</a></li>		
+                  <li><a href="layout-padrao.xhtml" title="">Item 2.1.3</a></li>
+                  <li><a href="layout-padrao.xhtml" title="">Item 2.1.4</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+				</ul>	
+        <ul>
+          <li><a href="layout-padrao.xhtml" title="" >Item 3</a>
+            <ul>
+              <li><a href="layout-padrao.xhtml" title="">Item 3.1</a>
+                <ul>
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.1</a></li>
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.2</a></li>			
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.3</a>
+  									<ul>
+                      <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.1</a></li>
+                      <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2</a>
+											  <ul>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.1</a></li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.2</a></li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.3</a></li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.4</a></li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.5</a>
+													  <ul>
+                              <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.5.1</a></li>
+                              <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.5.2</a></li>
+                              <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.5.3</a></li>
+                              <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.5.4</a></li>
+														</ul>
+													</li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.6</a></li>
+                          <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.2.7</a></li>
+												</ul>			
+											</li>			
+                      <li><a href="layout-padrao.xhtml" title="">Item 3.1.3.3</a></li>
+  									</ul>
+									</li>
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.4</a></li>
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.5</a></li>			
+                  <li><a href="layout-padrao.xhtml" title="">Item 3.1.6</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+				</ul>	
+  		</div> <!-- infraMenuVertical -->
+  	</div> <!-- infraAreaTelaE --> 	
+  </div> <!-- infraAreaTela -->
+</div> <!-- infraAreaGlobal -->
+</body>
+</html>

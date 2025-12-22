@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions
+    name="OuvidoriaWS"
+    targetNamespace="SeiOuvidoria"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+    xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:tns="SeiOuvidoria">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="SeiOuvidoria">
+
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+      <xsd:complexType name="Atributo">
+        <xsd:all>
+          <xsd:element name="Id" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Titulo" type="xsd:string"/>
+          <xsd:element name="Valor" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAtributo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Atributo[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="registrarOuvidoriaRequest">
+    <wsdl:part name="IdOrgao" type="xsd:string" />
+    <wsdl:part name="Nome" type="xsd:string" />
+    <wsdl:part name="Email" type="xsd:string" />
+    <wsdl:part name="Cpf" type="xsd:string" />
+    <wsdl:part name="Rg" type="xsd:string" />
+    <wsdl:part name="OrgaoExpedidor" type="xsd:string" />
+    <wsdl:part name="Telefone" type="xsd:string" />
+    <wsdl:part name="Estado" type="xsd:string" />
+    <wsdl:part name="Cidade" type="xsd:string" />
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string" />
+    <wsdl:part name="Processos" type="xsd:string" />
+    <wsdl:part name="SinRetorno" type="xsd:string" />
+    <wsdl:part name="Mensagem" type="xsd:string" />
+    <wsdl:part name="AtributosAdicionais" type="tns:ArrayOfAtributo"/>
+    <wsdl:part name="IdProcedimentoOrigem" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="registrarOuvidoriaResponse">
+    <wsdl:part name="processo" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarEstatisticasPortalRequest">
+    <wsdl:part name="Mes" type="xsd:string" />
+    <wsdl:part name="Ano" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarEstatisticasPortalResponse">
+    <wsdl:part name="estatisticas" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarEstadosRequest">
+    <wsdl:part name="Uf" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarEstadosResponse">
+    <wsdl:part name="strEstados" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarCidadesRequest">
+    <wsdl:part name="Uf" type="xsd:string" />
+    <wsdl:part name="Cidade" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarCidadesResponse">
+    <wsdl:part name="strCidades" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoRequest">
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoResponse">
+    <wsdl:part name="strEstados" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:portType name="SeiOuvidoriaPortType">
+
+    <wsdl:operation name="registrarOuvidoria">
+      <wsdl:documentation>Ouvidoria do Site</wsdl:documentation>
+      <wsdl:input message="tns:registrarOuvidoriaRequest"/>
+      <wsdl:output message="tns:registrarOuvidoriaResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarEstados">
+      <wsdl:documentation>Retorna lista de UFs</wsdl:documentation>
+      <wsdl:input message="tns:listarEstadosRequest"/>
+      <wsdl:output message="tns:listarEstadosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCidades">
+      <wsdl:documentation>Retorna lista de Cidades</wsdl:documentation>
+      <wsdl:input message="tns:listarCidadesRequest"/>
+      <wsdl:output message="tns:listarCidadesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimento">
+      <wsdl:documentation>Retorna lista de Tipos de Procedimento da Ouvidoria</wsdl:documentation>
+      <wsdl:input message="tns:listarTiposProcedimentoRequest"/>
+      <wsdl:output message="tns:listarTiposProcedimentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarEstatisticasPortal">
+      <wsdl:documentation>Gera Estatisticas para o Site</wsdl:documentation>
+      <wsdl:input message="tns:gerarEstatisticasPortalRequest"/>
+      <wsdl:output message="tns:gerarEstatisticasPortalResponse"/>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="SeiOuvidoriaBinding" type="tns:SeiOuvidoriaPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="registrarOuvidoria">
+      <soap:operation soapAction="SeiOuvidoriaAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarEstatisticasPortal">
+      <soap:operation soapAction="SeiOuvidoriaAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCidades">
+      <soap:operation soapAction="SeiOuvidoriaAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarEstados">
+      <soap:operation soapAction="SeiOuvidoriaAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimento">
+      <soap:operation soapAction="SeiOuvidoriaAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiOuvidoria" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="SeiOuvidoriaService">
+    <wsdl:port name="SeiOuvidoriaPortService" binding="tns:SeiOuvidoriaBinding">
+      <soap:address location="[servidor]/ws/OuvidoriaWS.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

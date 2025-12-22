@@ -1,0 +1,112 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Configuração da Assinatura Digital</title>
+<style>
+</style>
+</head>
+<body>
+
+<p align=center style='text-align:center;font-weight:bold;font-size:16pt;'>Configuração da Assinatura Digital</p>
+
+<p style='text-align:justify;text-indent:1in;'>É necessário que o Java 1.7 ou superior esteja instalado no computador. Como forma de verificar
+se o Java está instalado corretamente no navegador utilizado, sugere-se acessar o endereço <a target="_blank" href="http://www.java.com/pt_BR/download/testjava.jsp">http://www.java.com/pt_BR/download/testjava.jsp</a>. 
+Se a instalação estiver correta, será exibida uma mensagem semelhante à figura abaixo:
+</p>
+
+<p align=center style='text-align:center'><img border=0 width=388 height=111 src="[servidor]/ajuda/assinatura_digital_ajuda/image001.jpg">
+</p>
+
+<p  style='text-align:justify;text-indent:1in;'>Para acesso ao certificado em <i>smart card</i> ou <i>token</i> é necessária a instalação no computador
+dos drivers adequados. Os detalhes de instalação variam de fabricante para fabricante. 
+</p>
+
+<p  style='text-align:justify;text-indent:1in;'>A partir da versão 7 update 51 do Java é necessário que o código da <i>applet</i> seja assinado por uma Autoridade Certificadora confiável e na
+ versão 8 do Java não é mais possível rebaixar o nível de segurança. Assim para realização da assinatura existem três alternativas:<br />
+ <ol>
+ <li> Importar o certificado utilizado na assinatura do código do SEI para que este seja considerado confiável pelo Java;</li>
+ <li> Cadastrar o endereço do SEI na Lista de Exceções de Sites;</li>
+ <li> Se utilizando Java 7 rebaixar o nível de segurança do Java para “Médio” (alternativa menos segura).</li>
+</ol>
+</p>
+
+<ol style='margin-top:0cm' start=1 type=1>
+ <li  style='text-align:justify'><b>Importar o certificado da Autoridade Certificadora confiável</b></li>
+</ol>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.1 Fazer o download do certificado no endereço <a target="_blank" href="[servidor]/assinador/certificadora.csr">[servidor]/assinador/certificadora.csr</a>. O navegador irá perguntar se o usuário deseja abrir ou salvar o arquivo. Escolha a opção “Salvar”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=659 height=35 src="[servidor]/ajuda/assinatura_digital_ajuda/image004.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.2 Acessar as configurações do Java (no Windows, menu Iniciar, item Painel de Controle, opção Java):</p>
+
+<p  align=center style='text-align:center'><img border=0 width=606 height=334 src="[servidor]/ajuda/assinatura_digital_ajuda/image002.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.3 Selecionar a aba “Segurança”. Certificar-se que a opção “Ativar conteúdo Java no browser” encontra-se marcada. A seguir, clicar no botão “Gerenciar Certificados”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=456 height=472 src="[servidor]/ajuda/assinatura_digital_ajuda/image005.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.4 Selecionar o tipo de certificado “CA de Signatário” e clicar no botão ”Importar”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=501 height=446 src="[servidor]/ajuda/assinatura_digital_ajuda/image006.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.5 Selecionar o arquivo que foi baixado e clicar no botão “Abrir”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=531 height=399 src="[servidor]/ajuda/assinatura_digital_ajuda/image007b.jpg"></p>
+
+<p  align=center style='text-align:center'><img border=0 width=521 height=463 src="[servidor]/ajuda/assinatura_digital_ajuda/image008b.jpg"></p>
+
+<p  style='text-align:center;text-indent:0.5in;'><i>O nome da Autoridade Certificadora pode variar em função de novas atualizações.</i></p>
+
+<p  style='text-align:center;text-indent:0.5in;'><i>Neste ponto já é possível fechar as janelas relacionadas ao “Painel de Controle Java”.</i></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>1.6 Na hora da assinatura poderão surgir algumas telas de confirmação, neste caso, aceitar a execução:</p>
+
+<p  align=center style='margin-left:18.0pt;text-align:center'><img border=0 width=425 height=227 src="[servidor]/ajuda/assinatura_digital_ajuda/image009.jpg"></p>
+
+
+<ol style='margin-top:0cm' start="2" type="1">
+ <li  style='text-align:justify'><b>Cadastrar o endereço do SEI na Lista de Exceções de Sites</b></li>
+</ol>
+
+<p  style='text-align:justify;text-indent:0.5in;'>2.1 Acessar as configurações do Java (no Windows, menu Iniciar, item Painel de Controle, opção Java):</p>
+
+<p  align=center style='text-align:center'><img border=0 width=606 height=334 src="[servidor]/ajuda/assinatura_digital_ajuda/image002.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>2.2 Selecionar a aba “Segurança”. Certificar-se que a opção “Ativar conteúdo Java no browser” encontra-se marcada e clicar no botão “Editar Lista de Sites...”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=409 height=424 src="[servidor]/ajuda/assinatura_digital_ajuda/image010.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>2.3 Na tela Lista de Exceções de Sites clicar no botão “Adicionar”:</p>
+
+<p  align=center style='text-align:center'><img border=0 src="[servidor]/ajuda/assinatura_digital_ajuda/image011.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>2.4 No campo “Localização” digitar o endereço de acesso do SEI da instituição (atenção ao prefixo que pode ser http ou https), após clicar em OK:</p>
+
+<p  align=center style='text-align:center'><img border=0 src="[servidor]/ajuda/assinatura_digital_ajuda/image012.jpg"></p>
+
+<p  style='text-align:center;text-indent:0.5in;'><i>Neste ponto já é possível fechar as janelas relacionadas ao “Painel de Controle Java”.</i></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>2.5 Na hora da assinatura poderão surgir algumas telas de confirmação, neste caso, aceitar a execução:</p>
+
+<p  align=center style='text-align:center'><img border=0 src="[servidor]/ajuda/assinatura_digital_ajuda/image013.jpg"></p>
+
+
+<ol style='margin-top:0cm' start="3" type="1">
+ <li  style='text-align:justify'><b>Rebaixar o nível de segurança do Java 7 (não recomendado)</b></li>
+</ol>
+
+<p  style='text-align:justify;text-indent:0.5in;'>3.1 Acessar as configurações do Java (no Windows, menu Iniciar, item Painel de Controle, opção Java):</p>
+
+<p  align=center style='text-align:center'><img border=0 width=606 height=334 src="[servidor]/ajuda/assinatura_digital_ajuda/image002.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>3.2 Clicar na aba “Segurança”, indicar nível “Médio”, certificar-se que a opção “Ativar conteúdo Java no browser” está selecionada e clicar no botão “OK”:</p>
+
+<p  align=center style='text-align:center'><img border=0 width=409 height=424 src="[servidor]/ajuda/assinatura_digital_ajuda/image003.jpg"></p>
+
+<p  style='text-align:justify;text-indent:0.5in;'>3.3 Na hora da assinatura poderão surgir algumas telas de confirmação, neste caso, aceitar a execução:</p>
+
+<p  align=center style='text-align:center'><img border=0 src="[servidor]/ajuda/assinatura_digital_ajuda/image013.jpg"></p>
+
+</body>
+</html>

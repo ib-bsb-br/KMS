@@ -1,0 +1,63 @@
+
+div.infraAreaGlobal{
+width: 98%;
+}
+
+tr.trVermelha{
+background-color:#F59F9F; 
+}
+
+a.ancoraSigla{
+ /* color:#0000CC; */
+ text-decoration:none;
+ font-size:1em;
+}
+
+a.ancoraSigla:hover{
+ text-decoration:underline;
+}
+
+div.infraBarraSistema {padding-bottom:0}
+div.infraBarraSistemaE {padding: .5em 0 .3em 1em;}
+div.infraBarraSistemaD {padding: .5em 1em .3em 0;}
+
+
+/* Smartmenu */
+#main-menu{
+    margin:2px;
+}
+
+.sm-infra-vertical {
+    padding:5px 0 !important;
+    background: #d7d7d7 !important;
+    -moz-border-radius:0px !important;
+    -webkit-border-radius:0px !important;
+    border-radius:0px !important;
+}
+
+.sm-infra a {
+    color: black !important;
+    background-color:#d7d7d7;
+    border-bottom:1px solid white;
+    font-size:13px !important;
+    line-height:14px !important;
+}
+
+.sm-infra ul {
+    background: #d7d7d7 !important;
+    -moz-border-radius:0px !important;
+    -webkit-border-radius:0px !important;
+    border-radius:0px !important;
+}
+
+.sm-infra a:hover, .sm-infra a:focus, .sm-infra a:active, .sm-infra a.highlighted {
+    background-color:white !important;
+}
+
+.sm-infra-vertical a, .sm-infra ul a {
+    padding: 3px 30px 3px 10px !important;
+}
+
+#divInfraAreaTelaE ul li:last-child > a {
+    border:0;
+}

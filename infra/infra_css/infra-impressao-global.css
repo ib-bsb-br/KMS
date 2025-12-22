@@ -1,0 +1,27 @@
+body {
+display: inline;
+overflow: visible;
+} 
+
+div.infraImpressao {
+display: inline;
+overflow: visible;
+width:auto;
+}
+
+table {
+overflow: visible;
+width:96%;
+height: 100%;
+margin:0 2%;
+border-collapse: collapse;
+}
+
+tr, td, th {
+height:100%;
+page-break-inside:avoid;
+}
+
+p.infraQuebraPagina {
+page-break-before:always;
+}
