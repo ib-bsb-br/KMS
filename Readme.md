@@ -1,64 +1,58 @@
-SEI - Sistema Eletrônico de Informação
+# SEI - Sistema Eletrônico de Informação (Refactored for Debian 11 / RK3588)
 
-- Repositório com shell script de instalação do sistema SEI
+This repository contains the source code and installation scripts for deploying SEI on **Debian 11 (Bullseye)**, specifically targeted for **Rockchip RK3588** hardware.
 
-### Instalação SEI - WEBSERVER 
+## Installation
 
-- Centos7 
-- Apache
-- Memcached
-- PHP56
+### Prerequisites
+- Debian 11 (Bullseye)
+- Root privileges
+- Internet access
 
-### Script Shell - INSTALAÇÃO WEBSERVER
+### Installation Steps
 
-- SHELLSCRIPT - INSTALAÇÃO SEI: `/mnt/mSATA/sei-httpd.sh`
+1. Clone this repository to your machine.
+2. Run the installation script:
 
-### Upstream SEI NGINX
+   ```bash
+   sudo ./install_debian.sh
+   ```
+
+   This script will:
+   - Install PHP 5.6 (via Sury repository).
+   - Install Apache, MariaDB, and Memcached.
+   - Configure the database and import schemas.
+   - Deploy the application to `/var/www/html`.
+   - Configure the application settings.
+
+### Verification
+
+To verify the installation, run:
+
+```bash
+./verify_install.sh
 ```
-    upstream homolog-sei.com.br {
-            ip_hash;
-            server 10.1.0.133;
-            server 10.1.0.130;
-            keepalive 32;
-        }
 
-        server {
-            listen 80;
-            listen [::]:80;
-            server_name homolog-sei.com.br;
+## Architecture
 
-    #file-size
+- **Web Server**: Apache 2.4
+- **Database**: MariaDB
+- **Language**: PHP 5.6
+- **Cache**: Memcached
 
-            client_max_body_size 6144M;
+## Configuration
 
-    #ssl
-            listen 443 ssl;
-            listen [::]:443 ssl;
-            ssl_certificate     /etc/nginx/ssl/fullchain1.pem;
-            ssl_certificate_key /etc/nginx/ssl/privkey1.pem;
-            ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-            ssl_prefer_server_ciphers on;
-            ssl_ciphers                 ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256;
-    #logs
-            access_log      /var/log/nginx/homolog-sei.access.log main;
-            error_log       /var/log/nginx/homolog-sei.error.log warn;
+The main configuration files are located at:
+- `/var/www/html/sei/config/ConfiguracaoSEI.php`
+- `/var/www/html/sip/config/ConfiguracaoSip.php`
 
-    # force https-redirects
-        if ($scheme = http) {
-            return 301 https://$server_name$request_uri;
-    }
+The installation script automatically configures these with default values:
+- **DB User**: `sei_user`
+- **DB Password**: `sei_password`
+- **Host**: `localhost`
 
-            location / {
+## Notes for RK3588
 
-                    proxy_next_upstream     error timeout invalid_header http_500;
-                    proxy_connect_timeout   3;
-                    proxy_pass              http://homolog-sei.com.br;
-                   proxy_set_header           X-Real-IP   $remote_addr;
-                   proxy_set_header           X-Forwarded-For  \$proxy_add_x_forwarded_for;
-                   proxy_set_header           X-Forwarded-Proto  $scheme;
-                   proxy_set_header           X-Forwarded-Server  $host;
-                   proxy_set_header           X-Forwarded-Host  $host;
-                   proxy_redirect http:// https://;
-           }
-    }
-```
+This deployment leverages native system packages.
+- **PHP 5.6**: Installed from `deb.sury.org`, which provides ARM64 binaries.
+- **Storage**: The script defaults to `/var/www/html` for code and `/mnt/mSATA/sei-dados` for file storage (if `/mnt/mSATA` exists, otherwise ensure path is valid).
