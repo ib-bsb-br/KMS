@@ -2,16 +2,25 @@ SEI - Sistema Eletrônico de Informação
 
 - Repositório com shell script de instalação do sistema SEI
 
-### Instalação SEI - WEBSERVER 
+### Instalação SEI - WEBSERVER
 
-- Centos7 
-- Apache
+- Debian 11 em aarch64 (RK3588)
+- Apache2
 - Memcached
-- PHP56
+- PHP 5.6 (repositório Sury)
+- MariaDB
 
 ### Script Shell - INSTALAÇÃO WEBSERVER
 
-- SHELLSCRIPT - INSTALAÇÃO SEI: `/mnt/mSATA/sei-httpd.sh`
+- Script recomendado: `scripts/install-debian11-sei.sh`
+  - Instala Apache, PHP 5.6 e extensões, Memcached e MariaDB via `apt`.
+  - Copia os fontes `infra`, `sei`, `sip`, `docs` e `mysql` para `/opt/sei` (sobrescreva com `SEI_BASE_DIR` se necessário).
+  - Configura `php.ini`, site Apache, Memcached e importa os bancos `sei` e `sip` com o usuário `sei_app`/`sei_app_password`.
+  - Uso típico (como root): `SEI_DB_ROOT_PASSWORD=<senha-root-mysql> bash scripts/install-debian11-sei.sh`
+
+- Verificação pós-instalação: `scripts/verify-sei-stack.sh`
+  - Confere status do Apache, Memcached e MariaDB, módulos PHP e acessos aos bancos `sei` e `sip`.
+  - Gera log em `/tmp/sei-stack-check.log`.
 
 ### Upstream SEI NGINX
 ```
