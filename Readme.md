@@ -11,7 +11,7 @@ SEI - Sistema Eletrônico de Informação
 
 ### Script Shell - INSTALAÇÃO WEBSERVER
 
-- [SHELLSCRIPT - INSTALAÇÃO SEI]: `/mnt/mSATA/sei-httpd.sh`
+- SHELLSCRIPT - INSTALAÇÃO SEI: `/mnt/mSATA/sei-httpd.sh`
 
 ### Upstream SEI NGINX
 ```
