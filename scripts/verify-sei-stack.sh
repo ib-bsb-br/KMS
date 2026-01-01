@@ -55,7 +55,7 @@ main() {
   run_check "MariaDB is active" systemctl is-active --quiet mariadb
 
   run_check "PHP ${PHP_VERSION} modules" "php${PHP_VERSION}" -m
-  run_check "PHP ${PHP_VERSION} mysql extension" "php${PHP_VERSION}" -m | grep -q mysql
+  run_check "PHP ${PHP_VERSION} mysql extension" bash -c "php${PHP_VERSION} -m | grep -qi 'mysql'"
   run_check "SEI docroot exists" test -d "${APP_DIR}/sei/web"
   run_check "SIP docroot exists" test -d "${APP_DIR}/sip/web"
 
