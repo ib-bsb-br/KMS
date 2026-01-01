@@ -18,8 +18,8 @@ COMPOSER_HOME_DIR="${SEI_COMPOSER_HOME:-${PREFIX}/composer-cache}"
 # Relocation toggle (enabled by default for low-space root)
 RELOCATE_VAR="${SEI_RELOCATE_VAR:-1}"
 
-# Optional Solr (strictly opt-in; no invented version)
-INSTALL_SOLR="${INSTALL_SOLR:-0}"
+# Solr (mandatory; artifact + checksum required)
+INSTALL_SOLR="${INSTALL_SOLR:-1}"
 SOLR_TGZ_URL="${SOLR_TGZ_URL:-}"
 SOLR_SHA512="${SOLR_SHA512:-}"
 SOLR_INSTALL_DIR="${SOLR_INSTALL_DIR:-${PREFIX}/solr}"
@@ -276,7 +276,7 @@ install_packages() {
   wait_for_apt_locks
   apt-get update -y
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    apache2 mariadb-server memcached rsync curl unzip git \
+    apache2 mariadb-server memcached rsync curl wget unzip git openjdk-11-jre-headless \
     libapache2-mod-php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION}-cli php${PHP_APACHE_VERSION}-common \
     php${PHP_APACHE_VERSION}-curl php${PHP_APACHE_VERSION}-gd php${PHP_APACHE_VERSION}-imap php${PHP_APACHE_VERSION}-ldap \
     php${PHP_APACHE_VERSION}-mbstring php${PHP_APACHE_VERSION}-mysql php${PHP_APACHE_VERSION}-odbc php${PHP_APACHE_VERSION}-soap \
@@ -461,14 +461,12 @@ install_composer_deps() {
     || die "Composer autoload failed under php${PHP_APACHE_VERSION}"
 }
 
-install_solr_opt_in() {
-  [[ "$INSTALL_SOLR" == "1" ]] || return 0
-  [[ -n "$SOLR_TGZ_URL" ]] || die "INSTALL_SOLR=1 requires SOLR_TGZ_URL to be provided (no default assumed)."
+install_solr() {
+  [[ -n "$SOLR_TGZ_URL" ]] || die "SOLR_TGZ_URL is required for Solr installation."
+  [[ -n "$SOLR_SHA512" ]] || die "SOLR_SHA512 is required for integrity verification."
 
-  log "Installing Solr under prefix (opt-in)"
+  log "Installing Solr under prefix (mandatory)"
   wait_for_apt_locks
-  apt-get update -y
-  DEBIAN_FRONTEND=noninteractive apt-get install -y wget openjdk-11-jre-headless
 
   mkdir -p "$SOLR_INSTALL_DIR" "$SOLR_DATA_DIR"
   if ! id -u solr >/dev/null 2>&1; then
@@ -479,11 +477,7 @@ install_solr_opt_in() {
   local tgz="${TMPROOT}/solr.tgz"
   wget -O "$tgz" "$SOLR_TGZ_URL"
 
-  if [[ -n "$SOLR_SHA512" ]]; then
-    echo "${SOLR_SHA512}  ${tgz}" | sha512sum -c -
-  else
-    echo "WARN: SOLR_SHA512 not provided; tarball integrity not verified." >&2
-  fi
+  echo "${SOLR_SHA512}  ${tgz}" | sha512sum -c -
 
   mkdir -p "${TMPROOT}/solr-extract"
   tar -xzf "$tgz" -C "${TMPROOT}/solr-extract"
@@ -534,11 +528,7 @@ summarize() {
   echo "TMPROOT       : ${TMPROOT}"
   echo "SEI URL       : http://localhost/sei"
   echo "SIP URL       : http://localhost/sip"
-  if [[ "$INSTALL_SOLR" == "1" ]]; then
-    echo "Solr URL      : http://localhost:${SOLR_PORT}/solr"
-  else
-    echo "Solr          : not installed by script (INSTALL_SOLR=0)"
-  fi
+  echo "Solr URL      : http://localhost:${SOLR_PORT}/solr"
   echo
   echo "Note: apt-installed binaries (PHP/Apache/Java) still go to /usr; this script relocates large mutable state under PREFIX."
 }
@@ -565,7 +555,7 @@ main() {
   configure_apache
   bootstrap_database
   install_composer_deps
-  install_solr_opt_in
+  install_solr
 
   summarize
   if [[ "$SEI_RUN_VERIFY" == "1" ]]; then

@@ -10,12 +10,12 @@ Repositório com automação de instalação do SEI/SIP para Debian 11 com foco 
   * Coloca fontes em `${PREFIX}/app` e dados persistentes (repositório/uploads) em `${PREFIX}/data`.
   * Gera e persiste segredos em `${PREFIX}/secrets/sei-install.env` (sem credenciais hardcoded no código); senha de root só é persistida se fornecida explicitamente (Debian usa `unix_socket` por padrão).
   * Configura PHP 5.6 (Sury), Apache, Memcached (1024MB), MariaDB, Composer (rodando em PHP 7.4) e importa os bancos `sei`/`sip`.
-  * Instalação opcional do Solr via `INSTALL_SOLR=1 SOLR_TGZ_URL=... [SOLR_SHA512=...]` com serviços e dados sob `${PREFIX}/solr*`.
+  * Instala **obrigatoriamente** o Solr: defina `SOLR_TGZ_URL` e `SOLR_SHA512` (checksum exigido) para baixar o artefato. Instalação, serviço systemd e dados ficam sob `${PREFIX}/solr*`.
   * Executa verificação ao final; pode ser pulada com `SEI_RUN_VERIFY=0` ou tornada não fatal com `SEI_VERIFY_STRICT=0`.
 
 * **Verificador**: `scripts/verify-sei-stack.sh`
   * Reaproveita credenciais do arquivo de segredos e grava log em `${PREFIX}/var/log/sei/verify.log`.
-  * Checa status de Apache/Memcached/MariaDB, módulos PHP (incluindo MySQL), docroots, Composer autoload e rotas HTTP /sei e /sip.
+  * Checa status de Apache/Memcached/MariaDB/Solr, módulos PHP (incluindo MySQL), docroots, Composer autoload e rotas HTTP /sei, /sip e /solr.
 
 ### Uso rápido
 
@@ -25,8 +25,8 @@ SEI_PREFIX=/opt/sei-stack \
 SEI_DB_ROOT_PASSWORD=<senha-root-mysql> \
 bash scripts/install-debian11-sei.sh
 
-# opcional Solr
-INSTALL_SOLR=1 SOLR_TGZ_URL="https://.../solr.tgz" SOLR_SHA512="<sha512>" \
+# Solr obrigatório: forneça URL e SHA-512 do artefato
+SOLR_TGZ_URL="https://.../solr.tgz" SOLR_SHA512="<sha512>" \
 bash scripts/install-debian11-sei.sh
 
 # verificação (já executada pelo instalador; use SEI_RUN_VERIFY=0 para pular)
@@ -44,7 +44,7 @@ bash scripts/verify-sei-stack.sh
 ### Observações
 
 * Binários instalados via `apt` continuam em `/usr`; o script apenas realoca caches e dados pesados.
-* Ajuste os endpoints de Solr/JODConverter/SMTP conforme o ambiente final.
+* Ajuste os endpoints de Solr/JODConverter/SMTP conforme o ambiente final (Solr já sobe em `http://localhost:8983/solr`).
 * A checagem de fingerprint do repositório Sury gera aviso por padrão; defina `SURY_STRICT_FPR=1` para bloquear em caso de rotação de chave.
 
 ### Upstream SEI NGINX
