@@ -147,7 +147,11 @@ relocate_dir_to_optvar() {
   fi
 
   if [[ -d "$src" ]]; then
-    rsync -a "$src/" "$dst/"
+    if command -v rsync >/dev/null 2>&1; then
+      rsync -a "$src/" "$dst/"
+    else
+      cp -a "$src/." "$dst/"
+    fi
   fi
 
   rm -rf "$src"
