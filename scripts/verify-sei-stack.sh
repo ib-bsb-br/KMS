@@ -62,7 +62,7 @@ main() {
   run_check "Composer autoload present" test -f "${APP_DIR}/infra/infra_php/vendor/autoload.php"
   run_check "Composer autoload loads under php${PHP_VERSION}" "php${PHP_VERSION}" -r "require '${APP_DIR}/infra/infra_php/vendor/autoload.php';"
 
-  run_check "HTTP /sei responds" curl -fsS --max-time 5 http://localhost/sei/ >/dev/null
+  run_check "HTTP /sei responds" curl -fsS --max-time 5 http://localhost/sei/
   run_check "HTTP /sip responds" curl -fsS --max-time 5 http://localhost/sip/ >/dev/null
 
   run_check "DB sei reachable" mysql --defaults-extra-file="$df" -e "USE sei; SHOW TABLES LIMIT 1;" >/dev/null
