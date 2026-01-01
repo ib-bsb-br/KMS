@@ -1,26 +1,51 @@
 SEI - Sistema Eletrônico de Informação
 
-- Repositório com shell script de instalação do sistema SEI
+Repositório com automação de instalação do SEI/SIP para Debian 11 com foco em arm64 (RK3588), priorizando que todo o estado mutável e caches fiquem sob `/opt` para aliviar partições raiz pequenas.
 
-### Instalação SEI - WEBSERVER
+### Automação principal
 
-- Debian 11 em aarch64 (RK3588)
-- Apache2
-- Memcached
-- PHP 5.6 (repositório Sury)
-- MariaDB
+* **Instalador**: `scripts/install-debian11-sei.sh`
+  * Prefixo padrão: `/opt/sei-stack` (sobreponha com `SEI_PREFIX` ou `SEI_BASE_DIR`).
+  * Reloca caches do APT, logs do Apache e datadir do MariaDB para `${PREFIX}/var` e cria symlinks de volta para `/var`.
+  * Coloca fontes em `${PREFIX}/app` e dados persistentes (repositório/uploads) em `${PREFIX}/data`.
+  * Gera e persiste segredos em `${PREFIX}/secrets/sei-install.env` (sem credenciais hardcoded no código); senha de root só é persistida se fornecida explicitamente (Debian usa `unix_socket` por padrão).
+  * Configura PHP 5.6 (Sury), Apache, Memcached (1024MB), MariaDB, Composer (rodando em PHP 7.4) e importa os bancos `sei`/`sip`.
+  * Instalação opcional do Solr via `INSTALL_SOLR=1 SOLR_TGZ_URL=... [SOLR_SHA512=...]` com serviços e dados sob `${PREFIX}/solr*`.
+  * Executa verificação ao final; pode ser pulada com `SEI_RUN_VERIFY=0` ou tornada não fatal com `SEI_VERIFY_STRICT=0`.
 
-### Script Shell - INSTALAÇÃO WEBSERVER
+* **Verificador**: `scripts/verify-sei-stack.sh`
+  * Reaproveita credenciais do arquivo de segredos e grava log em `${PREFIX}/var/log/sei/verify.log`.
+  * Checa status de Apache/Memcached/MariaDB, módulos PHP (incluindo MySQL), docroots, Composer autoload e rotas HTTP /sei e /sip.
 
-- Script recomendado: `scripts/install-debian11-sei.sh`
-  - Instala Apache, PHP 5.6 e extensões, Memcached e MariaDB via `apt`.
-  - Copia os fontes `infra`, `sei`, `sip`, `docs` e `mysql` para `/opt/sei` (sobrescreva com `SEI_BASE_DIR` se necessário).
-  - Configura `php.ini`, site Apache, Memcached e importa os bancos `sei` e `sip` com o usuário `sei_app`/`sei_app_password`.
-  - Uso típico (como root): `SEI_DB_ROOT_PASSWORD=<senha-root-mysql> bash scripts/install-debian11-sei.sh`
+### Uso rápido
 
-- Verificação pós-instalação: `scripts/verify-sei-stack.sh`
-  - Confere status do Apache, Memcached e MariaDB, módulos PHP e acessos aos bancos `sei` e `sip`.
-  - Gera log em `/tmp/sei-stack-check.log`.
+```bash
+# como root
+SEI_PREFIX=/opt/sei-stack \
+SEI_DB_ROOT_PASSWORD=<senha-root-mysql> \
+bash scripts/install-debian11-sei.sh
+
+# opcional Solr
+INSTALL_SOLR=1 SOLR_TGZ_URL="https://.../solr.tgz" SOLR_SHA512="<sha512>" \
+bash scripts/install-debian11-sei.sh
+
+# verificação (já executada pelo instalador; use SEI_RUN_VERIFY=0 para pular)
+bash scripts/verify-sei-stack.sh
+```
+
+### Estrutura esperada (padrão)
+
+* Código: `/opt/sei-stack/app`
+* Dados persistentes (repositorio/uploads): `/opt/sei-stack/data`
+* Logs/caches/datadir MariaDB e caches APT: `/opt/sei-stack/var`
+* Segredos: `/opt/sei-stack/secrets/sei-install.env`
+* Cache do Composer: `/opt/sei-stack/composer-cache`
+
+### Observações
+
+* Binários instalados via `apt` continuam em `/usr`; o script apenas realoca caches e dados pesados.
+* Ajuste os endpoints de Solr/JODConverter/SMTP conforme o ambiente final.
+* A checagem de fingerprint do repositório Sury gera aviso por padrão; defina `SURY_STRICT_FPR=1` para bloquear em caso de rotação de chave.
 
 ### Upstream SEI NGINX
 ```
