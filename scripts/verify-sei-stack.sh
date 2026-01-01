@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-PREFIX="${SEI_PREFIX:-/opt/sei-stack}"
+PREFIX="${SEI_PREFIX:-/mnt/mSATA/SEI}"
 APP_DIR="${SEI_BASE_DIR:-${PREFIX}/app}"
 SEI_SECRETS_FILE="${SEI_SECRETS_FILE:-${PREFIX}/secrets/sei-install.env}"
 PHP_VERSION="${PHP_VERSION:-5.6}"
