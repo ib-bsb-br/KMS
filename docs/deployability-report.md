@@ -6,16 +6,16 @@
 
 ## Observations
 - **Platform now Debian-based**: automation installs Apache2, PHP 5.6 (Sury repository), Memcached, and MariaDB using `apt` with arm64-compatible packages.
-- **Filesystem layout standardized**: sources and docs are synchronized to `/opt/sei-stack/app` by default, with overrides via `SEI_PREFIX`/`SEI_BASE_DIR`.
+- **Filesystem layout standardized**: sources and docs are synchronized to `/mnt/mSATA/SEI/app` by default, with overrides via `SEI_PREFIX`/`SEI_BASE_DIR`.
 - **Configuration defaults are concrete**: SEI/SIP config files now point to localhost services, real database names/users (`sei`, `sip`, `sei_app`/`sei_app_password`), memcached at `127.0.0.1:11211`, and localhost integrations (Solr, JODConverter, mail).
 - **Database bootstrapping automated**: SEI and SIP schemas are imported automatically from bundled SQL scripts; user and privileges are created.
 - **Verification available**: a health-check script validates service status, PHP module loading, document roots, and DB connectivity.
 
 ## How to deploy on the target host
-1. (Optional) Export variables: `export SEI_PREFIX=/opt/sei-stack` and `export SEI_DB_ROOT_PASSWORD=<mysql-root-password>`.
+1. (Optional) Export variables: `export SEI_PREFIX=/mnt/mSATA/SEI` and `export SEI_DB_ROOT_PASSWORD=<mysql-root-password>`.
 2. Provide Solr artifacts (mandatory): `export SOLR_TGZ_URL=<url>` and `export SOLR_SHA512=<sha512>`.
 3. Run as root: `bash scripts/install-debian11-sei.sh`.
-4. After completion, run `bash scripts/verify-sei-stack.sh` to confirm services and database connectivity; check the log at `${SEI_PREFIX:-/opt/sei-stack}/var/log/sei/verify.log`.
+4. After completion, run `bash scripts/verify-sei-stack.sh` to confirm services and database connectivity; check the log at `${SEI_PREFIX:-/mnt/mSATA/SEI}/var/log/sei/verify.log`.
 
 ## Files introduced
 - `scripts/install-debian11-sei.sh` – end-to-end installer for Debian 11 aarch64.
@@ -23,6 +23,6 @@
 - Updated `Readme.md`, `sei/config/ConfiguracaoSEI.php`, and `sip/config/ConfiguracaoSip.php` with Debian-focused defaults.
 
 ## Remaining manual considerations
-- Provide Solr artifacts (URL + SHA-512) so the installer can deploy and verify Solr under `/opt/sei-stack/solr` and expose it at `http://localhost:8983/solr`. Adjust URLs if a different endpoint/port is required.
+- Provide Solr artifacts (URL + SHA-512) so the installer can deploy and verify Solr under `/mnt/mSATA/SEI/solr` and expose it at `http://localhost:8983/solr`. Adjust URLs if a different endpoint/port is required.
 - Configure outbound SMTP if sendmail is insufficient; defaults use localhost without authentication.
-- Ensure sufficient storage at `${SEI_PREFIX:-/opt/sei-stack}/data/repositorio` for SEI attachments.
+- Ensure sufficient storage at `${SEI_PREFIX:-/mnt/mSATA/SEI}/data/repositorio` for SEI attachments.
