@@ -5,7 +5,7 @@ Repositório com automação de instalação do SEI/SIP para Debian 11 com foco 
 ### Automação principal
 
 * **Instalador**: `scripts/install-debian11-sei.sh`
-  * Prefixo padrão: `/opt/sei-stack` (sobreponha com `SEI_PREFIX` ou `SEI_BASE_DIR`).
+  * Prefixo padrão: `/mnt/mSATA/SEI` (sobreponha com `SEI_PREFIX` ou `SEI_BASE_DIR`).
   * Reloca caches do APT, logs do Apache e datadir do MariaDB para `${PREFIX}/var` e cria symlinks de volta para `/var`.
   * Coloca fontes em `${PREFIX}/app` e dados persistentes (repositório/uploads) em `${PREFIX}/data`.
   * Gera e persiste segredos em `${PREFIX}/secrets/sei-install.env` (sem credenciais hardcoded no código); senha de root só é persistida se fornecida explicitamente (Debian usa `unix_socket` por padrão).
@@ -21,7 +21,7 @@ Repositório com automação de instalação do SEI/SIP para Debian 11 com foco 
 
 ```bash
 # como root
-SEI_PREFIX=/opt/sei-stack \
+SEI_PREFIX=/mnt/mSATA/SEI \
 SEI_DB_ROOT_PASSWORD=<senha-root-mysql> \
 bash scripts/install-debian11-sei.sh
 
@@ -35,11 +35,11 @@ bash scripts/verify-sei-stack.sh
 
 ### Estrutura esperada (padrão)
 
-* Código: `/opt/sei-stack/app`
-* Dados persistentes (repositorio/uploads): `/opt/sei-stack/data`
-* Logs/caches/datadir MariaDB e caches APT: `/opt/sei-stack/var`
-* Segredos: `/opt/sei-stack/secrets/sei-install.env`
-* Cache do Composer: `/opt/sei-stack/composer-cache`
+* Código: `/mnt/mSATA/SEI/app`
+* Dados persistentes (repositorio/uploads): `/mnt/mSATA/SEI/data`
+* Logs/caches/datadir MariaDB e caches APT: `/mnt/mSATA/SEI/var`
+* Segredos: `/mnt/mSATA/SEI/secrets/sei-install.env`
+* Cache do Composer: `/mnt/mSATA/SEI/composer-cache`
 
 ### Observações
 
