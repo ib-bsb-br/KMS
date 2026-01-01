@@ -14,7 +14,7 @@
 ## How to deploy on the target host
 1. (Optional) Exporte variáveis: `export SEI_PREFIX=/opt/sei-stack` e `export SEI_DB_ROOT_PASSWORD=<senha-root-mysql>`.
 2. Run as root: `bash scripts/install-debian11-sei.sh`.
-3. Após a conclusão, rode `bash scripts/verify-sei-stack.sh` para confirmar serviços e conectividade de banco; consulte o log em `${SEI_PREFIX:-/opt/sei-stack}/var/log/sei/verify.log`.
+3. After completion, run `bash scripts/verify-sei-stack.sh` to confirm services and database connectivity; review the log at `${SEI_PREFIX:-/opt/sei-stack}/var/log/sei/verify.log`.
 
 ## Files introduced
 - `scripts/install-debian11-sei.sh` – end-to-end installer for Debian 11 aarch64.
