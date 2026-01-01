@@ -177,7 +177,7 @@ relocate_var_heavy_dirs() {
   fi
   relocate_dir_to_optvar "/var/log/apache2" "${OPT_VAR}/log/apache2" "root:adm" "750"
   if systemctl list-unit-files | grep -q '^apache2\.service'; then
-    systemctl start apache2 >/dev/null 2>&1 || true
+    systemctl start apache2 >/dev/null 2>&1
   fi
 }
 
