@@ -6,6 +6,7 @@ APP_DIR="${SEI_BASE_DIR:-${PREFIX}/app}"
 SEI_SECRETS_FILE="${SEI_SECRETS_FILE:-${PREFIX}/secrets/sei-install.env}"
 PHP_VERSION="${PHP_VERSION:-5.6}"
 LOG_FILE="${LOG_FILE:-${PREFIX}/var/log/sei/verify.log}"
+SOLR_PORT="${SOLR_PORT:-8983}"
 
 umask 077
 
@@ -53,6 +54,7 @@ main() {
   run_check "Apache is active" systemctl is-active --quiet apache2
   run_check "Memcached is active" systemctl is-active --quiet memcached
   run_check "MariaDB is active" systemctl is-active --quiet mariadb
+  run_check "Solr is active" systemctl is-active --quiet solr
 
   run_check "PHP ${PHP_VERSION} modules" "php${PHP_VERSION}" -m
   run_check "PHP ${PHP_VERSION} mysql extension" bash -c "php${PHP_VERSION} -m | grep -qi 'mysql'"
@@ -64,6 +66,7 @@ main() {
 
   run_check "HTTP /sei responds" curl -fsS --max-time 5 http://localhost/sei/
   run_check "HTTP /sip responds" curl -fsS --max-time 5 http://localhost/sip/
+  run_check "HTTP /solr responds" curl -fsS --max-time 5 "http://localhost:${SOLR_PORT}/solr/"
 
   run_check "DB sei reachable" mysql --defaults-extra-file="$df" -e "USE sei; SHOW TABLES LIMIT 1;"
   run_check "DB sip reachable" mysql --defaults-extra-file="$df" -e "USE sip; SHOW TABLES LIMIT 1;"

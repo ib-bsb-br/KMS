@@ -13,8 +13,9 @@
 
 ## How to deploy on the target host
 1. (Optional) Export variables: `export SEI_PREFIX=/opt/sei-stack` and `export SEI_DB_ROOT_PASSWORD=<mysql-root-password>`.
-2. Run as root: `bash scripts/install-debian11-sei.sh`.
-3. After completion, run `bash scripts/verify-sei-stack.sh` to confirm services and database connectivity; check the log at `${SEI_PREFIX:-/opt/sei-stack}/var/log/sei/verify.log`.
+2. Provide Solr artifacts (mandatory): `export SOLR_TGZ_URL=<url>` and `export SOLR_SHA512=<sha512>`.
+3. Run as root: `bash scripts/install-debian11-sei.sh`.
+4. After completion, run `bash scripts/verify-sei-stack.sh` to confirm services and database connectivity; check the log at `${SEI_PREFIX:-/opt/sei-stack}/var/log/sei/verify.log`.
 
 ## Files introduced
 - `scripts/install-debian11-sei.sh` – end-to-end installer for Debian 11 aarch64.
@@ -22,6 +23,6 @@
 - Updated `Readme.md`, `sei/config/ConfiguracaoSEI.php`, and `sip/config/ConfiguracaoSip.php` with Debian-focused defaults.
 
 ## Remaining manual considerations
-- Provide Solr and JODConverter services at the configured localhost endpoints or adjust URLs accordingly.
+- Provide Solr artifacts (URL + SHA-512) so the installer can deploy and verify Solr under `/opt/sei-stack/solr` and expose it at `http://localhost:8983/solr`. Adjust URLs if a different endpoint/port is required.
 - Configure outbound SMTP if sendmail is insufficient; defaults use localhost without authentication.
 - Ensure sufficient storage at `${SEI_PREFIX:-/opt/sei-stack}/data/repositorio` for SEI attachments.
