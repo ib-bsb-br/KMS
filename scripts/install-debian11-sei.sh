@@ -5,7 +5,7 @@ trap 'rc=$?; echo "ERROR (rc=$rc) at line $LINENO: $BASH_COMMAND" >&2; exit $rc'
 # -----------------------------
 # /opt-first prefix layout
 # -----------------------------
-PREFIX="${SEI_PREFIX:-/opt/sei-stack}"
+PREFIX="${SEI_PREFIX:-/mnt/mSATA/SEI}"
 
 APP_DIR="${SEI_BASE_DIR:-${PREFIX}/app}"
 DATA_DIR="${SEI_DATA_DIR:-${PREFIX}/data}"
