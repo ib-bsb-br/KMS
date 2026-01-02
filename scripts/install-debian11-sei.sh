@@ -470,9 +470,15 @@ install_solr() {
   if [[ "$SOLR_VERSION" != "$SOLR_VERSION_EXPECTED" ]]; then
     die "Solr version must be ${SOLR_VERSION_EXPECTED} (got ${SOLR_VERSION})."
   fi
+  local solr_basename
+  solr_basename="$(basename "${SOLR_TGZ_URL}")"
   [[ -n "$SOLR_TGZ_URL" ]] || die "SOLR_TGZ_URL is required for Solr installation."
   [[ -n "$SOLR_SHA512" ]] || die "SOLR_SHA512 is required for integrity verification."
   [[ -x "${SOLR_JAVA_HOME}/bin/java" ]] || die "Java 8 runtime not found at ${SOLR_JAVA_HOME}; install openjdk-8-jre-headless."
+
+  if [[ "$solr_basename" != "solr-${SOLR_VERSION_EXPECTED}.tgz" ]]; then
+    die "SOLR_TGZ_URL must reference solr-${SOLR_VERSION_EXPECTED}.tgz (got ${solr_basename})."
+  fi
 
   log "Installing Solr under prefix (mandatory)"
   wait_for_apt_locks
