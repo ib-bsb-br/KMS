@@ -10,7 +10,8 @@ Repositório com automação de instalação do SEI/SIP para Debian 11 com foco 
   * Coloca fontes em `${PREFIX}/app` e dados persistentes (repositório/uploads) em `${PREFIX}/data`.
   * Gera e persiste segredos em `${PREFIX}/secrets/sei-install.env` (sem credenciais hardcoded no código); senha de root só é persistida se fornecida explicitamente (Debian usa `unix_socket` por padrão).
   * Configura PHP 5.6 (Sury), Apache, Memcached (1024MB), MariaDB, Composer (rodando em PHP 7.4) e importa os bancos `sei`/`sip`.
-  * Instala **obrigatoriamente** o Solr: defina `SOLR_TGZ_URL` e `SOLR_SHA512` (checksum exigido) para baixar o artefato. Instalação, serviço systemd e dados ficam sob `${PREFIX}/solr*`.
+  * Instala **obrigatoriamente** o Solr: por padrão baixa o artefato **6.1.0** do archive Apache e valida o SHA-512 oficial (`SOLR_SHA512` pode ser sobrescrito). Instalação, serviço systemd e dados ficam sob `${PREFIX}/solr*`.
+  * Usa **Java 8 (1.8)** para atender o requisito do Solr 6.1.0 (`SOLR_JAVA_HOME` pode apontar para outro caminho caso necessário).
   * Executa verificação ao final; pode ser pulada com `SEI_RUN_VERIFY=0` ou tornada não fatal com `SEI_VERIFY_STRICT=0`.
 
 * **Verificador**: `scripts/verify-sei-stack.sh`

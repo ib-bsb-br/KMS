@@ -20,11 +20,16 @@ RELOCATE_VAR="${SEI_RELOCATE_VAR:-1}"
 
 # Solr (mandatory; artifact + checksum required)
 INSTALL_SOLR="${INSTALL_SOLR:-1}"
-SOLR_TGZ_URL="${SOLR_TGZ_URL:-}"
-SOLR_SHA512="${SOLR_SHA512:-}"
+SOLR_VERSION_EXPECTED="6.1.0"
+SOLR_VERSION="${SOLR_VERSION:-${SOLR_VERSION_EXPECTED}}"
 SOLR_INSTALL_DIR="${SOLR_INSTALL_DIR:-${PREFIX}/solr}"
 SOLR_DATA_DIR="${SOLR_DATA_DIR:-${PREFIX}/solr-data}"
 SOLR_PORT="${SOLR_PORT:-8983}"
+SOLR_JAVA_HOME="${SOLR_JAVA_HOME:-/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture 2>/dev/null || echo amd64)}"
+SOLR_DEFAULT_TGZ_URL="https://archive.apache.org/dist/lucene/solr/${SOLR_VERSION_EXPECTED}/solr-${SOLR_VERSION_EXPECTED}.tgz"
+SOLR_DEFAULT_SHA512="4a70f0154bf96012d26606f75a69ec357d385facd6a2665a60f01ff9ed6e3575f07d1830418588714b4b4c435bfb2e121a653eb91715450f4e2ad510c0483a86"
+SOLR_TGZ_URL="${SOLR_TGZ_URL:-${SOLR_DEFAULT_TGZ_URL}}"
+SOLR_SHA512="${SOLR_SHA512:-${SOLR_DEFAULT_SHA512}}"
 
 DB_SEI="sei"
 DB_SIP="sip"
@@ -276,7 +281,7 @@ install_packages() {
   wait_for_apt_locks
   apt-get update -y
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    apache2 mariadb-server memcached rsync curl wget unzip git openjdk-11-jre-headless \
+    apache2 mariadb-server memcached rsync curl wget unzip git openjdk-8-jre-headless \
     libapache2-mod-php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION}-cli php${PHP_APACHE_VERSION}-common \
     php${PHP_APACHE_VERSION}-curl php${PHP_APACHE_VERSION}-gd php${PHP_APACHE_VERSION}-imap php${PHP_APACHE_VERSION}-ldap \
     php${PHP_APACHE_VERSION}-mbstring php${PHP_APACHE_VERSION}-mysql php${PHP_APACHE_VERSION}-odbc php${PHP_APACHE_VERSION}-soap \
@@ -462,8 +467,12 @@ install_composer_deps() {
 }
 
 install_solr() {
+  if [[ "$SOLR_VERSION" != "$SOLR_VERSION_EXPECTED" ]]; then
+    die "Solr version must be ${SOLR_VERSION_EXPECTED} (got ${SOLR_VERSION})."
+  fi
   [[ -n "$SOLR_TGZ_URL" ]] || die "SOLR_TGZ_URL is required for Solr installation."
   [[ -n "$SOLR_SHA512" ]] || die "SOLR_SHA512 is required for integrity verification."
+  [[ -x "${SOLR_JAVA_HOME}/bin/java" ]] || die "Java 8 runtime not found at ${SOLR_JAVA_HOME}; install openjdk-8-jre-headless."
 
   log "Installing Solr under prefix (mandatory)"
   wait_for_apt_locks
@@ -489,6 +498,10 @@ install_solr() {
   fi
   local extracted="${extracted_dirs[0]}"
 
+  if [[ "$(basename "$extracted")" != "solr-${SOLR_VERSION_EXPECTED}" ]]; then
+    die "Unexpected Solr directory $(basename "$extracted"); expected solr-${SOLR_VERSION_EXPECTED}."
+  fi
+
   rsync -a --delete "${extracted}/" "${SOLR_INSTALL_DIR}/"
   chown -R solr:solr "${SOLR_INSTALL_DIR}"
 
@@ -503,6 +516,8 @@ User=solr
 Group=solr
 Environment=SOLR_HOME=${SOLR_DATA_DIR}
 Environment=SOLR_PORT=${SOLR_PORT}
+Environment=SOLR_JAVA_HOME=${SOLR_JAVA_HOME}
+Environment=JAVA_HOME=${SOLR_JAVA_HOME}
 ExecStart=${SOLR_INSTALL_DIR}/bin/solr start -p ${SOLR_PORT} -s ${SOLR_DATA_DIR}
 ExecStop=${SOLR_INSTALL_DIR}/bin/solr stop -p ${SOLR_PORT}
 Restart=on-failure
