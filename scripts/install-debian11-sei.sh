@@ -20,11 +20,18 @@ RELOCATE_VAR="${SEI_RELOCATE_VAR:-1}"
 
 # Solr (mandatory; artifact + checksum required)
 INSTALL_SOLR="${INSTALL_SOLR:-1}"
-SOLR_TGZ_URL="${SOLR_TGZ_URL:-}"
-SOLR_SHA512="${SOLR_SHA512:-}"
+SOLR_VERSION="6.1.0"
 SOLR_INSTALL_DIR="${SOLR_INSTALL_DIR:-${PREFIX}/solr}"
 SOLR_DATA_DIR="${SOLR_DATA_DIR:-${PREFIX}/solr-data}"
 SOLR_PORT="${SOLR_PORT:-8983}"
+SOLR_JAVA_HOME="${SOLR_JAVA_HOME:-}"
+SOLR_DEFAULT_TGZ_URL="https://archive.apache.org/dist/lucene/solr/${SOLR_VERSION}/solr-${SOLR_VERSION}.tgz"
+SOLR_DEFAULT_SHA512="4a70f0154bf96012d26606f75a69ec357d385facd6a2665a60f01ff9ed6e3575f07d1830418588714b4b4c435bfb2e121a653eb91715450f4e2ad510c0483a86"
+SOLR_TGZ_URL="${SOLR_TGZ_URL:-${SOLR_DEFAULT_TGZ_URL}}"
+SOLR_SHA512="${SOLR_SHA512:-${SOLR_DEFAULT_SHA512}}"
+
+TEMURIN_KEYRING="/usr/share/keyrings/adoptium.gpg"
+TEMURIN_LIST="/etc/apt/sources.list.d/adoptium.list"
 
 DB_SEI="sei"
 DB_SIP="sip"
@@ -271,12 +278,33 @@ add_sury_repo() {
   echo "deb [signed-by=${SURY_KEYRING}] https://packages.sury.org/php/ $(lsb_release -sc) main" >"$SURY_LIST"
 }
 
+add_temurin_repo_if_needed() {
+  if apt-cache show openjdk-8-jre-headless >/dev/null 2>&1; then
+    return 0
+  fi
+
+  log "Adding Adoptium Temurin repo for Java 8"
+  wait_for_apt_locks
+  apt-get update -y
+  DEBIAN_FRONTEND=noninteractive apt-get install -y ca-certificates apt-transport-https lsb-release wget gnupg
+
+  if [[ ! -f "$TEMURIN_KEYRING" ]]; then
+    wget -qO- https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor -o "$TEMURIN_KEYRING"
+    chmod 644 "$TEMURIN_KEYRING"
+  fi
+
+  echo "deb [signed-by=${TEMURIN_KEYRING}] https://packages.adoptium.net/artifactory/deb $(lsb_release -sc) main" >"$TEMURIN_LIST"
+  wait_for_apt_locks
+  apt-get update -y
+}
+
 install_packages() {
   log "Installing packages (note: binaries install to /usr; caches are relocated to /opt prefix)"
   wait_for_apt_locks
   apt-get update -y
+  add_temurin_repo_if_needed
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    apache2 mariadb-server memcached rsync curl wget unzip git openjdk-11-jre-headless \
+    apache2 mariadb-server memcached rsync curl wget unzip git openjdk-8-jre-headless \
     libapache2-mod-php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION} php${PHP_APACHE_VERSION}-cli php${PHP_APACHE_VERSION}-common \
     php${PHP_APACHE_VERSION}-curl php${PHP_APACHE_VERSION}-gd php${PHP_APACHE_VERSION}-imap php${PHP_APACHE_VERSION}-ldap \
     php${PHP_APACHE_VERSION}-mbstring php${PHP_APACHE_VERSION}-mysql php${PHP_APACHE_VERSION}-odbc php${PHP_APACHE_VERSION}-soap \
@@ -461,9 +489,52 @@ install_composer_deps() {
     || die "Composer autoload failed under php${PHP_APACHE_VERSION}"
 }
 
+resolve_solr_java_home() {
+  if [[ -n "$SOLR_JAVA_HOME" ]]; then
+    return 0
+  fi
+
+  local java_bin="$(command -v java || true)"
+  [[ -n "$java_bin" ]] || die "Java runtime not found on PATH; install openjdk-8-jre-headless first."
+
+  java_bin="$(readlink -f "$java_bin")"
+  local candidate="$(dirname "$(dirname "$java_bin")")"
+
+  if [[ -x "${candidate}/bin/java" ]]; then
+    SOLR_JAVA_HOME="$candidate"
+    return 0
+  fi
+
+  if [[ -x "${candidate}/jre/bin/java" ]]; then
+    SOLR_JAVA_HOME="${candidate}/jre"
+    return 0
+  fi
+
+  die "Unable to derive SOLR_JAVA_HOME from ${java_bin}; set SOLR_JAVA_HOME explicitly."
+}
+
+assert_java8_runtime() {
+  local java_bin="${SOLR_JAVA_HOME}/bin/java"
+  [[ -x "$java_bin" ]] || die "Java runtime not found at ${java_bin}."
+
+  local version_output
+  version_output="$($java_bin -version 2>&1 | head -n1)"
+  if ! grep -q '"1\.8\.' <<<"$version_output"; then
+    die "Solr requires Java 8; detected version '${version_output}'."
+  fi
+}
+
 install_solr() {
+  local solr_basename
+  solr_basename="$(basename "${SOLR_TGZ_URL}")"
   [[ -n "$SOLR_TGZ_URL" ]] || die "SOLR_TGZ_URL is required for Solr installation."
   [[ -n "$SOLR_SHA512" ]] || die "SOLR_SHA512 is required for integrity verification."
+  resolve_solr_java_home
+  assert_java8_runtime
+
+  if [[ "$solr_basename" != "solr-${SOLR_VERSION}.tgz" ]]; then
+    die "SOLR_TGZ_URL must reference solr-${SOLR_VERSION}.tgz (got ${solr_basename})."
+  fi
 
   log "Installing Solr under prefix (mandatory)"
   wait_for_apt_locks
@@ -489,6 +560,10 @@ install_solr() {
   fi
   local extracted="${extracted_dirs[0]}"
 
+  if [[ "$(basename "$extracted")" != "solr-${SOLR_VERSION}" ]]; then
+    die "Unexpected Solr directory $(basename "$extracted"); expected solr-${SOLR_VERSION}."
+  fi
+
   rsync -a --delete "${extracted}/" "${SOLR_INSTALL_DIR}/"
   chown -R solr:solr "${SOLR_INSTALL_DIR}"
 
@@ -503,6 +578,8 @@ User=solr
 Group=solr
 Environment=SOLR_HOME=${SOLR_DATA_DIR}
 Environment=SOLR_PORT=${SOLR_PORT}
+Environment=SOLR_JAVA_HOME=${SOLR_JAVA_HOME}
+Environment=JAVA_HOME=${SOLR_JAVA_HOME}
 ExecStart=${SOLR_INSTALL_DIR}/bin/solr start -p ${SOLR_PORT} -s ${SOLR_DATA_DIR}
 ExecStop=${SOLR_INSTALL_DIR}/bin/solr stop -p ${SOLR_PORT}
 Restart=on-failure
